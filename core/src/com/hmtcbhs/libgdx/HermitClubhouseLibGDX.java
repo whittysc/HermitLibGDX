@@ -1,5 +1,6 @@
 package com.hmtcbhs.libgdx;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -14,6 +15,8 @@ public class HermitClubhouseLibGDX extends ApplicationAdapter {
 	private int mWidth;
 	private int mHeight;
 
+	private static final String TAG = "HermitClubhouseLibGDX";
+	
 	//Set the constants for the absolute values of the speed in either direction
 	private static final float SPEED_X = 400.0f;
 	private static final float SPEED_Y = 300.0f;
@@ -59,11 +62,24 @@ public class HermitClubhouseLibGDX extends ApplicationAdapter {
 	private OneDVelocityVector vectorX;
 	private OneDVelocityVector vectorY;
 
+	public static native int addThem (int num1, int num2)/*-{
+		return $wnd.add(num1, num2);
+	}-*/;
+	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
-
+		
+		//We need to set the LogLevel here because it's automatically
+		//set to not print out anything for HTML. We need to get rid
+		//of this line later!
+		Gdx.app.setLogLevel(Application.LOG_INFO);
+		
+		//Call into the JavaScript file to find out what 5+6 is!
+		int res = addThem(5,6);
+		Gdx.app.log(TAG, "Result: "+res);
+		
 		mWidth = Gdx.graphics.getWidth();
 		mHeight = Gdx.graphics.getHeight();
 
