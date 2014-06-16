@@ -2,11 +2,11 @@ package com.hmtcbhs.libgdx.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.hmtcbhs.libgdx.HermitClubhouseLibGDX;
+import com.hmtcbhs.libgdx.HermitClubhouseLibGDXClient;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new HermitClubhouseLibGDX(), config);
+		new LwjglApplication(new HermitClubhouseLibGDXClient(), config);
 	}
 }

@@ -3,7 +3,7 @@ package com.hmtcbhs.libgdx.client;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.gwt.GwtApplication;
 import com.badlogic.gdx.backends.gwt.GwtApplicationConfiguration;
-import com.hmtcbhs.libgdx.HermitClubhouseLibGDX;
+import com.hmtcbhs.libgdx.HermitClubhouseLibGDXServer;
 
 public class HtmlLauncher extends GwtApplication {
 
@@ -14,6 +14,6 @@ public class HtmlLauncher extends GwtApplication {
 
         @Override
         public ApplicationListener getApplicationListener () {
-                return new HermitClubhouseLibGDX();
+                return new HermitClubhouseLibGDXServer();
         }
 }
