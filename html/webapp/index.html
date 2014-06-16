@@ -13,21 +13,84 @@
               <div align="center" id="embed-html"></div>
               <script type="text/javascript" src="html/html.nocache.js"></script>
               <script type="text/javascript" src="assets/myTest.js"></script>
-       </body>
-       
-       <script>
-              function handleMouseDown(evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
-                evt.target.style.cursor = 'default';
-              }
+              <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+              <script type="text/javascript">
               
-              function handleMouseUp(evt) {
-                evt.preventDefault();
-                evt.stopPropagation();
-                evt.target.style.cursor = '';
-              }
+                  //setup namespace protocol and start receiver manager
+                  window.onload=function(){
+                      window.PROTOCOL = 'urn:x-cast:HermitAnimationTest';
+                      cast.receiver.logger.setLevelValue(0);
+                      window.castReceiverManager=cast.receiver.CastReceiverManager.getInstance();
+                      console.log('Starting Receiver Manager');
+                      
+                      //setup CastMessageBus to handle messages for a custom namespace
+                      //also selects the message type that will be received
+                      window.messageBus=
+                        window.castReceiverManager.getMessageBus(
+                            window.PROTOCOL,
+                            window.cast.receiver.CastMessageBus.MessageType.JSON);
+                  
+                  
+                      //setup handler for onReady event
+                      castReceiverManager.onReady = function(event){
+                        console.log("Received Ready event :" + JSON.stringify(event.data));
+                         window.castReceiverManager.setApplicationState("Application status is ready");
+                      };
+                  
+                      //setup handler for onSenderConnected event
+                      castReceiverManager.onSenderConnected = function(event){
+                        console.log('Received senderConnected event. Total number of ' +
+                                    "senders connected: " + 
+                                     window.castRecieverManager.getSenders().length);
+                      };
+                  
+                      //setup handler for onSenderDisconnected event
+                      castReceiverManager.onSenderDisconnected = function(event){
+                        console.log('Received senderDisconnected event. Total number '+
+                                    "of senders connected: " + 
+                                     window.castRecieverManager.getSenders().length);
+                    
+                        //close the display when the last sender disconnects
+                        if(window.castReceiverManager.getSenders().length == 0){
+                          window.close();
+                       }
+                     };
+                  
+                      //setup handler for onSystemVolumeChanged event
+                      castReceiverManager.onSystemVolumeChanged = function(event){
+                          console.log('Received System Volume Changed event: " + 
+                                       event.data['level'] + " " + event.data['muted']);
+                      };
+                      
+                      //setup handler for CastMessageBus onMessage event
+                      //TODO: The message received should be thrown back to the java code
+                      //and be handled there rather than in the JS code
+                      window.messageBus.onMessage = function(event){
+                          console.log('Received a message from the client');
+                      };
+                      
+                      //setup complete, start the receiver manager
+                      window.castReceiverManager.start({"statusText: Application is starting"});
+                      console.log('Receiver Manager started');
+                 
+                  }; 
+                  
+                  function handleMouseDown(evt) {
+               		 evt.preventDefault();
+                	 evt.stopPropagation();
+               		 evt.target.style.cursor = 'default';
+             	 }
+              
+              	  function handleMouseUp(evt) {
+                	 evt.preventDefault();
+                	 evt.stopPropagation();
+              	 	 evt.target.style.cursor = '';
+             	 }
               document.getElementById('embed-html').addEventListener('mousedown', handleMouseDown, false);
               document.getElementById('embed-html').addEventListener('mouseup', handleMouseUp, false);
-       </script>
+              </script>
+              
+       </body>
+       
+
 </html>
